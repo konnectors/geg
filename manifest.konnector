@@ -1,0 +1,112 @@
+{
+  "version": "0.0.1",
+  "name": "GEG",
+  "type": "konnector",
+  "language": "node",
+  "icon": "icon.png",
+  "slug": "geg",
+  "source": "git@gitlab.com:kapt/open-source/cozy-konnector-geg.git",
+  "editor": "Kapt",
+  "vendor_link": "https://monagence.geg.fr/",
+  "categories": [
+    "energy"
+  ],
+  "frequency": "hourly",
+  "fields": {
+    "login": {
+      "type": "text"
+    },
+    "password": {
+      "type": "password"
+    },
+    "contract_number": {
+      "type": "text",
+      "min": 1
+    },
+    "advancedFields": {
+      "folderPath": {
+        "advanced": true,
+        "isRequired": false
+      }
+    }
+  },
+  "data_types": [
+    "bill"
+  ],
+  "screenshots": [],
+  "permissions": {
+    "bank operations": {
+      "type": "io.cozy.bank.operations"
+    },
+    "bills": {
+      "type": "io.cozy.bills"
+    },
+    "files": {
+      "type": "io.cozy.files"
+    },
+    "accounts": {
+      "type": "io.cozy.accounts",
+      "verbs": [
+        "GET"
+      ]
+    }
+  },
+  "developer": {
+    "name": "KAPT",
+    "url": "https://www.kapt.mobi/"
+  },
+  "langs": [
+    "fr",
+    "en"
+  ],
+  "locales": {
+    "fr": {
+      "fields": {
+        "contract_number": {
+          "label": "Numéro de contrat"
+        }
+      },
+      "short_description": "Récupère les factures pour un numéro de contrat donné",
+      "long_description": "Récupère l'ensemble des factures disponibles sur l'espace client GEG, pour un numéro de contrat donné",
+      "permissions": {
+        "bank operations": {
+          "description": "Utilisé pour relier les factures à des operations bancaires"
+        },
+        "bills": {
+          "description": "Utilisé pour sauver les données des factures"
+        },
+        "files": {
+          "description": "Utilisé pour sauvegarder les factures"
+        },
+        "accounts": {
+          "description": "Utilisé pour obtenir les données du compte"
+        }
+      }
+    },
+    "en": {
+      "fields": {
+        "contract_number": {
+          "label": "Contract number"
+        }
+      },
+      "short_description": "Retrieves invoices for a given contract number",
+      "long_description": "Retrieves all available invoices on the GEG Customer Area, for a given contract number",
+      "permissions": {
+        "bank operations": {
+          "description": "Required to link bank operations to bills"
+        },
+        "bills": {
+          "description": "Required to save the bills data"
+        },
+        "files": {
+          "description": "Required to save the bills"
+        },
+        "accounts": {
+          "description": "Required to get the account's data"
+        }
+      }
+    }
+  },
+  "banksTransactionRegExp": "\\bgeg\\b",
+  "manifest_version": "2"
+}
