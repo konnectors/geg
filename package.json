@@ -1,5 +1,5 @@
 {
-  "name": "cozy-konnector-template",
+  "name": "cozy-konnector-geg",
   "version": "0.0.1",
   "description": "",
   "repository": {
@@ -41,6 +41,8 @@
   },
   "devDependencies": {
     "cozy-jobs-cli": "1.16.4",
-    "cozy-konnector-build": "1.2.3"
+    "cozy-konnector-build": "1.2.3",
+    "pdfjs": "^2.4.7",
+    "pdfjs-dist": "2.4.456"
   }
 }
