@@ -19,7 +19,7 @@
     "password": {
       "type": "password"
     },
-    "contract_number": {
+    "contractNumber": {
       "type": "text",
       "min": 1
     },
@@ -62,7 +62,7 @@
   "locales": {
     "fr": {
       "fields": {
-        "contract_number": {
+        "contractNumber": {
           "label": "Numéro de contrat"
         }
       },
@@ -85,7 +85,7 @@
     },
     "en": {
       "fields": {
-        "contract_number": {
+        "contractNumber": {
           "label": "Contract number"
         }
       },

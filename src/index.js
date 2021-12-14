@@ -92,8 +92,8 @@ async function start (fields, cozyParameters) {
 
   let userContractId = null
 
-  if (fields['contract_number']) {
-    userContractId = fields['contract_number'].toString()
+  if (fields['contractNumber']) {
+    userContractId = fields['contractNumber'].toString()
 
     if (!contractIds.includes(userContractId)) {
       throw new Error('Contract number is invalid for this account')
