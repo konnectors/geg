@@ -106,7 +106,7 @@ async function start (fields, cozyParameters) {
     log('debug', 'Fetching invoices for contract id: ' + contractId)
 
     // Fetch invoices details
-    const invoices = await getContractInvoicesLines(contractId)
+    const invoices = await getContractInvoicesLines(fields, contractId)
 
     // Save invoices details to cozy instance
     await saveInvoices.bind(this)(fields, invoices)
@@ -333,7 +333,7 @@ async function getContractHomePage (contractId, contractHash) {
   })
 }
 
-async function getContractInvoicesLines (contractId) {
+async function getContractInvoicesLines (fields, contractId) {
   const contractHash = await getContractHashValue(contractId)
 
   await getContractHomePage(contractId, contractHash)
@@ -353,7 +353,7 @@ async function getContractInvoicesLines (contractId) {
 
   const $tableLines = $contractInvoices('#tbl_mesFacturesExtrait tr')
 
-  const invoiceLines = []
+  let invoiceLines = []
 
   $tableLines.each((i, tr) => {
     const invoiceLine = $contractInvoices(tr)
@@ -412,6 +412,15 @@ async function getContractInvoicesLines (contractId) {
       }
     })
   })
+
+  if (fields.onlyLastNMonths && parseInt(fields.onlyLastNMonths) > 0) {
+    let fromDate = new Date()
+    fromDate.setMonth(fromDate.getMonth() - parseInt(fields.onlyLastNMonths))
+
+    invoiceLines = invoiceLines.filter(invoice => {
+      return invoice.expireDate >= fromDate
+    })
+  }
 
   return invoiceLines
 }
