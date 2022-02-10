@@ -75,7 +75,7 @@ module.exports = new BaseKonnector(start)
 // the account information come from ./konnector-dev-config.json file
 // cozyParameters are static parameters, independents from the account. Most often, it can be a
 // secret api key.
-async function start (fields, cozyParameters) {
+async function start(fields, cozyParameters) {
   log('info', 'Authenticating ...')
   if (cozyParameters) {
     log('debug', 'Found COZY_PARAMETERS:')
@@ -114,7 +114,7 @@ async function start (fields, cozyParameters) {
 }
 
 // Updates the global rqIdVal value
-function updateRqIdVal ($page) {
+function updateRqIdVal($page) {
   const pageValue = $page('input[name=_rqId_]').val()
 
   if (pageValue) {
@@ -133,7 +133,7 @@ Args:
 Returns:
 - The full request
 */
-async function postRequest (uri, form) {
+async function postRequest(uri, form) {
   // log('debug', `POST request to : ${uri}`)
   // log('debug', 'with form : ')
   // log('debug', form)
@@ -168,7 +168,7 @@ Args:
 Returns:
 - The full request
 */
-async function getRequest (uri, qs = {}) {
+async function getRequest(uri, qs = {}) {
   // log('debug', `GET request to : ${uri}`)
   // log('debug', 'with query : ')
   // log('debug', qs)
@@ -192,7 +192,7 @@ async function getRequest (uri, qs = {}) {
 
 // Authenticates the client using the login page.
 // The login mechanism is a session on the server side, using a session_id cookie, that must be kept on the cookiejar ot all requests.
-async function authenticate (username, password) {
+async function authenticate(username, password) {
   // The use of the sign-in function is not mandatory in a connector and won't work if the sign-in page does not use html forms. Here, a simple POST request may be a lot more simple.
 
   // -> We use a simple POST request to login as HP is blocked if you access it more than 3 times in 120 minutes, so it's easier to POST data directly as if we came from the main site: https://particuliers.geg.fr/
@@ -218,7 +218,7 @@ async function authenticate (username, password) {
   // log('debug', 'Assigned sbsVal to: ' + sbsVal)
 }
 
-async function getContractIds () {
+async function getContractIds() {
   // The GEG client area is splitted by contract identifiers.
   // We must precise a contract id in the search engine to then extract the invoices, otherwise the search engine complains that there are too many contracts.
   // The complete contract Ids list is available in the "Mes documents" section of the client area.
@@ -250,7 +250,7 @@ async function getContractIds () {
   return contractIds
 }
 
-async function getContractHashValue (contractId) {
+async function getContractHashValue(contractId) {
   // To consult the details of a given contract, we must extract its hash value, returned when posting the search engine page
 
   // Get the search engine page to update rqIdVal value
@@ -300,7 +300,7 @@ async function getContractHashValue (contractId) {
   return contractHash
 }
 
-async function getContractHomePage (contractId, contractHash) {
+async function getContractHomePage(contractId, contractHash) {
   await postRequest(MAIN_API_URL, {
     _nwg_: '',
     _sbs_: sbsVal,
@@ -333,7 +333,7 @@ async function getContractHomePage (contractId, contractHash) {
   })
 }
 
-async function getContractInvoicesLines (fields, contractId) {
+async function getContractInvoicesLines(fields, contractId) {
   const contractHash = await getContractHashValue(contractId)
 
   await getContractHomePage(contractId, contractHash)
@@ -381,7 +381,8 @@ async function getContractInvoicesLines (fields, contractId) {
             .val()
           const invoiceDateparts = invoiceDateStr.split('/')
           const invoiceDate = new Date(
-            `${invoiceDateparts[2]}-${invoiceDateparts[1]}-${invoiceDateparts[0]
+            `${invoiceDateparts[2]}-${invoiceDateparts[1]}-${
+              invoiceDateparts[0]
             }T00:00:00.000Z`
           )
           const amountExclTax = normalizePrice(
@@ -425,7 +426,7 @@ async function getContractInvoicesLines (fields, contractId) {
   return invoiceLines
 }
 
-async function fetchInvoice (entry) {
+async function fetchInvoice(entry) {
   const invoice = entry.invoice
 
   // log(
@@ -470,16 +471,17 @@ async function fetchInvoice (entry) {
   }).pipe(new stream.PassThrough())
 }
 
-async function saveInvoices (fields, invoices) {
+async function saveInvoices(fields, invoices) {
   const documents = []
 
   for (const invoice of invoices) {
     // Due to the very specific way the requests are handled on the server side, the requests "GET https://monagence.geg.fr/aelPROD/jsp/arc/habilitation/contrat.ZoomerContratOFactures.go?_sbs_=211110170137_1&_rqId_=XXX&act=consulterFactureDuplicata&selIdmesFacturesExtrait=YYYYY" and "POST https://monagence.geg.fr/aelPROD/jsp/arc/habilitation/contrat.ZoomerContratOFactures.go" must absolutely being executed consecutively.
     // So we can't parallelize their dl
-    const filename = `${VENDOR}_${invoice.contractId}_${invoice.id
-      }_${utils.formatDate(invoice.expireDate)}_${invoice.amountInclTax.toFixed(
-        2
-      )}EUR.pdf`
+    const filename = `${VENDOR}_${invoice.contractId}_${
+      invoice.id
+    }_${utils.formatDate(invoice.expireDate)}_${invoice.amountInclTax.toFixed(
+      2
+    )}EUR.pdf`
 
     documents.push({
       fetchFile: fetchInvoice,
@@ -501,6 +503,6 @@ async function saveInvoices (fields, invoices) {
 }
 
 // Convert a price string to a float
-function normalizePrice (price) {
+function normalizePrice(price) {
   return parseFloat(price.replace(',', '.').trim())
 }
