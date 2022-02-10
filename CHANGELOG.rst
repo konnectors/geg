@@ -2,6 +2,19 @@ Changelog
 =========
 
 
+v0.0.3 (2022-02-10)
+-------------------
+
+Bug fixes
+~~~~~~~~~
+- Remove reference to .travis.yml file in webpack config [Benjamin
+  PIERRE]
+
+Documentation
+~~~~~~~~~~~~~
+- Update changelog [Benjamin PIERRE]
+
+
 v0.0.2 (2022-02-10)
 -------------------
 
