@@ -43,7 +43,7 @@
     "babel-eslint": "^10.1.0",
     "copy-webpack-plugin": "^10.2.4",
     "cozy-app-publish": "^0.29.0",
-    "cozy-jobs-cli": "1.16.4",
+    "cozy-jobs-cli": "1.16.7",
     "cozy-konnector-build": "1.2.3",
     "eslint": "^8.8.0",
     "eslint-plugin-prettier": "^4.0.0",
