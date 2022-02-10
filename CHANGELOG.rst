@@ -2,6 +2,24 @@ Changelog
 =========
 
 
+v0.0.2 (2022-02-10)
+-------------------
+
+Documentation
+~~~~~~~~~~~~~
+- Update changelog [Benjamin PIERRE]
+
+Maintenance
+~~~~~~~~~~~
+- Update dev dependencies versions [Benjamin PIERRE]
+- Reformat index.js after lint [Benjamin PIERRE]
+- MAINT: Fix lint problems dues to babel-eslint old version : -
+  https://github.com/eslint/eslint/issues/12117 -
+  https://yarnpkg.com/cli/set/resolution - yarn set resolution babel-
+  eslint@npm:10.0.1 ^10.1.0 [Benjamin PIERRE]
+- Begin to configure CI [Benjamin PIERRE]
+
+
 v0.0.1 (2022-02-10)
 -------------------
 
