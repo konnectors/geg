@@ -1,0 +1,47 @@
+image: node:16-alpine
+
+cache:
+  paths:
+    - .yarn
+    - node_modules/
+
+before_script:
+  - yarn install
+
+stages:
+  - lint
+  - build
+  - deploy
+
+lint:
+  stage: lint
+  only:
+    - main
+  script:
+    - yarn lint
+
+build:
+  stage: build
+  only:
+    - main
+  script:
+    - yarn build
+
+deploy:
+  stage: deploy
+  only:
+    - tags
+  before_script:
+    - apk add bash
+    - apk add git
+    - apk add openssh-client
+    - eval `ssh-agent -s`
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "${SSH_PUBLIC_KEY}" >> ~/.ssh/id_ed25519.pub
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' >> ~/.ssh/id_ed25519
+    - chmod 400 ~/.ssh/id_ed25519
+  script:
+    - yarn build
+    - DEPLOY_BRANCH=build yarn deploy
