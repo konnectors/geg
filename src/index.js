@@ -264,7 +264,7 @@ async function getContractHashValue(contractId) {
   const $searchContractPage = (await postRequest(MAIN_API_URL, {
     _nwg_: '',
     _sbs_: sbsVal,
-    act: 'rechercherContrat',
+    act: 'basculerRechercheAvancee',
     _rqId_: rqIdVal,
     _ongIdx: '',
     _mnLck_: true,
