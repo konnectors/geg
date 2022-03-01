@@ -1,17 +1,16 @@
 {
-  "version": "0.0.3",
+  "version": "1.0.0",
   "name": "GEG",
   "type": "konnector",
   "language": "node",
   "icon": "icon.png",
   "slug": "geg",
-  "source": "git@gitlab.com:kapt/open-source/cozy-konnector-geg.git",
+  "source": "git@github.com:konnectors/geg.git",
   "editor": "Kapt",
   "vendor_link": "https://monagence.geg.fr/",
   "categories": [
     "energy"
   ],
-  "frequency": "hourly",
   "fields": {
     "login": {
       "type": "text"
