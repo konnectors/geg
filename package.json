@@ -40,18 +40,7 @@
     "cozy-konnector-libs": "4.45.0"
   },
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
-    "copy-webpack-plugin": "^10.2.4",
-    "cozy-app-publish": "^0.29.0",
     "cozy-jobs-cli": "1.16.7",
-    "cozy-konnector-build": "1.2.3",
-    "eslint": "^8.8.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "git-directory-deploy": "^1.5.1",
-    "pdfjs": "^2.4.7",
-    "pdfjs-dist": "2.4.456",
-    "webpack": "^5.68.0",
-    "webpack-cli": "^4.9.2"
-  },
-  "packageManager": "yarn@3.1.1"
+    "cozy-konnector-build": "1.2.3"
+  }
 }
