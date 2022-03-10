@@ -42,6 +42,7 @@ module.exports = {
         { from: 'package.json' },
         { from: 'README.md' },
         { from: 'assets', transform: optimizeSVGIcon },
+        { from: '.travis.yml' },
         { from: 'LICENSE' }
       ]
     }),
