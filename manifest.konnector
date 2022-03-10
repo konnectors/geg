@@ -18,116 +18,6 @@
     "password": {
       "type": "password"
     },
-    "contractNumber": {
-      "type": "text",
-      "min": 1
-    },
-    "onlyLastNMonths": {
-      "type": "dropdown",
-      "isRequired": false,
-      "options": [
-        {
-            "name": "---------",
-            "value": 0
-        },
-        {
-            "name": "1",
-            "value": "1"
-        },
-        {
-            "name": "2",
-            "value": "2"
-        },
-        {
-            "name": "3",
-            "value": "3"
-        },
-        {
-            "name": "4",
-            "value": "4"
-        },
-        {
-            "name": "5",
-            "value": "5"
-        },
-        {
-            "name": "6",
-            "value": "6"
-        },
-        {
-            "name": "7",
-            "value": "7"
-        },
-        {
-            "name": "8",
-            "value": "8"
-        },
-        {
-            "name": "9",
-            "value": "9"
-        },
-        {
-            "name": "10",
-            "value": "10"
-        },
-        {
-            "name": "11",
-            "value": "11"
-        },
-        {
-            "name": "12",
-            "value": "12"
-        },
-        {
-            "name": "13",
-            "value": "13"
-        },
-        {
-            "name": "14",
-            "value": "14"
-        },
-        {
-            "name": "15",
-            "value": "15"
-        },
-        {
-            "name": "16",
-            "value": "16"
-        },
-        {
-            "name": "17",
-            "value": "17"
-        },
-        {
-            "name": "18",
-            "value": "18"
-        },
-        {
-            "name": "19",
-            "value": "19"
-        },
-        {
-            "name": "20",
-            "value": "20"
-        },
-        {
-            "name": "21",
-            "value": "21"
-        },
-        {
-            "name": "22",
-            "value": "22"
-        },
-        {
-            "name": "23",
-            "value": "23"
-        },
-        {
-            "name": "24",
-            "value": "24"
-        }
-      ]
-    },
     "advancedFields": {
       "folderPath": {
         "advanced": true,
@@ -174,8 +64,8 @@
           "label": "Télécharger uniquement les N derniers mois"
         }
       },
-      "short_description": "Récupère les factures pour un numéro de contrat donné",
-      "long_description": "Récupère l'ensemble des factures disponibles sur l'espace client GEG, pour un numéro de contrat donné",
+      "short_description": "Récupère vos factures GEG dans votre Cozy",
+      "long_description": "Récupère l'ensemble des factures disponibles sur l'espace client GEG de vos contrats actuels et passés",
       "permissions": {
         "bank operations": {
           "description": "Utilisé pour relier les factures à des operations bancaires"
