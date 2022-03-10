@@ -37,10 +37,10 @@
     "travisDeployKey": "./bin/generate_travis_deploy_key"
   },
   "dependencies": {
-    "cozy-konnector-libs": "4.45.0"
+    "cozy-konnector-libs": "4.51.0"
   },
   "devDependencies": {
-    "cozy-jobs-cli": "1.16.7",
+    "cozy-jobs-cli": "1.17.4",
     "cozy-konnector-build": "1.2.3"
   }
 }
