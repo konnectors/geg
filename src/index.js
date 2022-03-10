@@ -1,3 +1,7 @@
+process.env.SENTRY_DSN =
+  process.env.SENTRY_DSN ||
+  'https://a6c3731ddfed4735814c29b6c9602389@errors.cozycloud.cc/34'
+
 const {
   BaseKonnector,
   requestFactory,
@@ -89,7 +93,6 @@ async function start(fields, cozyParameters) {
 
   // Get all contract ids of the client account
   let contractIds = await getContractIds()
-
 
   for (const contractId of contractIds) {
     log('debug', 'Fetching invoices for contract id: ' + contractId)
