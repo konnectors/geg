@@ -90,17 +90,6 @@ async function start(fields, cozyParameters) {
   // Get all contract ids of the client account
   let contractIds = await getContractIds()
 
-  let userContractId = null
-
-  if (fields['contractNumber']) {
-    userContractId = fields['contractNumber'].toString()
-
-    if (!contractIds.includes(userContractId)) {
-      throw new Error('Contract number is invalid for this account')
-    }
-
-    contractIds = [userContractId]
-  }
 
   for (const contractId of contractIds) {
     log('debug', 'Fetching invoices for contract id: ' + contractId)
