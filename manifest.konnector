@@ -122,6 +122,9 @@
     "DOC_QUALIFICATION_V2",
     "SENTRY_V2"
   ],
+  "qualification_labels":[
+    "energy_invoice"
+  ],
   "banksTransactionRegExp": "\\bgeg\\b",
   "manifest_version": "2"
 }
