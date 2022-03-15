@@ -7,7 +7,8 @@ const {
   requestFactory,
   log,
   utils,
-  errors
+  errors,
+  cozyClient
 } = require('cozy-konnector-libs')
 const stream = require('stream')
 
@@ -60,6 +61,10 @@ const rawRequest = requestFactory({
   // Des-activate [cheerio](https://cheerio.js.org/) parsing
   cheerio: false
 })
+
+// Importing models to get qualification by label
+const models = cozyClient.new.models
+const { Qualification } = models.document
 
 // A global unique counter used in the server-side
 // of client area to count the number of requests made
@@ -222,11 +227,13 @@ async function getContractIds() {
 
   const contractIds = []
 
-  const $myDocumentsPage = (await getRequest(DOCUMENTS_URL, {
-    _rqId_: rqIdVal,
-    _sbs_: sbsVal,
-    act: 'demarrer'
-  })).body
+  const $myDocumentsPage = (
+    await getRequest(DOCUMENTS_URL, {
+      _rqId_: rqIdVal,
+      _sbs_: sbsVal,
+      act: 'demarrer'
+    })
+  ).body
 
   $myDocumentsPage('select[name=selectionReferenceContrat] option').each(
     (i, option) => {
@@ -253,30 +260,32 @@ async function getContractHashValue(contractId) {
   })
 
   // Post search engine page to get the contract hash value
-  const $searchContractPage = (await postRequest(MAIN_API_URL, {
-    _nwg_: '',
-    _sbs_: sbsVal,
-    act: 'basculerRechercheAvancee',
-    _rqId_: rqIdVal,
-    _ongIdx: '',
-    _mnLck_: true,
-    _startForm_: '',
-    CRITERE_OFFRE_PRODUIT: '',
-    CRITERE_STATUT_CONTRAT: '',
-    CRITERE_REFERENCE_CONTRAT: contractId,
-    CRITERE_REFERENCE_EXTERNE: '',
-    CRITERE_NOM_TITULAIRE: '',
-    CRITERE_REFERENCE_TITULAIRE: '',
-    CRITERE_ROLE: '',
-    CRITERE_SPECIFICITE: '',
-    numero: '',
-    typeDonneeGeo: 'VIDE',
-    voie: '',
-    codePostal: '',
-    commune: '',
-    CRITERE_REFERENCE_EDL: '',
-    _endForm_: ''
-  })).body
+  const $searchContractPage = (
+    await postRequest(MAIN_API_URL, {
+      _nwg_: '',
+      _sbs_: sbsVal,
+      act: 'basculerRechercheAvancee',
+      _rqId_: rqIdVal,
+      _ongIdx: '',
+      _mnLck_: true,
+      _startForm_: '',
+      CRITERE_OFFRE_PRODUIT: '',
+      CRITERE_STATUT_CONTRAT: '',
+      CRITERE_REFERENCE_CONTRAT: contractId,
+      CRITERE_REFERENCE_EXTERNE: '',
+      CRITERE_NOM_TITULAIRE: '',
+      CRITERE_REFERENCE_TITULAIRE: '',
+      CRITERE_ROLE: '',
+      CRITERE_SPECIFICITE: '',
+      numero: '',
+      typeDonneeGeo: 'VIDE',
+      voie: '',
+      codePostal: '',
+      commune: '',
+      CRITERE_REFERENCE_EDL: '',
+      _endForm_: ''
+    })
+  ).body
 
   const contractHashId = $searchContractPage(
     "a[id^='consulterContratApresRecherche_']"
@@ -330,18 +339,20 @@ async function getContractInvoicesLines(fields, contractId) {
 
   await getContractHomePage(contractId, contractHash)
 
-  const $contractInvoices = (await postRequest(MAIN_API_URL, {
-    _nwg_: '',
-    _sbs_: sbsVal,
-    act: 'consulterFactures',
-    _rqId_: rqIdVal,
-    _ongIdx: '',
-    _mnLck_: false,
-    _startForm_: '',
-    EQUILIBRE_SERVICE_ID: '',
-    typeAffaireHorsContrat: 'vide22546706795',
-    _endForm_: ''
-  })).body
+  const $contractInvoices = (
+    await postRequest(MAIN_API_URL, {
+      _nwg_: '',
+      _sbs_: sbsVal,
+      act: 'consulterFactures',
+      _rqId_: rqIdVal,
+      _ongIdx: '',
+      _mnLck_: false,
+      _startForm_: '',
+      EQUILIBRE_SERVICE_ID: '',
+      typeAffaireHorsContrat: 'vide22546706795',
+      _endForm_: ''
+    })
+  ).body
 
   const $tableLines = $contractInvoices('#tbl_mesFacturesExtrait tr')
 
@@ -373,23 +384,15 @@ async function getContractInvoicesLines(fields, contractId) {
             .val()
           const invoiceDateparts = invoiceDateStr.split('/')
           const invoiceDate = new Date(
-            `${invoiceDateparts[2]}-${invoiceDateparts[1]}-${
-              invoiceDateparts[0]
-            }T00:00:00.000Z`
+            `${invoiceDateparts[2]}-${invoiceDateparts[1]}-${invoiceDateparts[0]}T00:00:00.000Z`
           )
           const amountExclTax = normalizePrice(
-            $contractInvoices(thirdCell)
-              .find('input')
-              .val()
+            $contractInvoices(thirdCell).find('input').val()
           )
           const amountInclTax = normalizePrice(
-            $contractInvoices(fourthCell)
-              .find('input')
-              .val()
+            $contractInvoices(fourthCell).find('input').val()
           )
-          const status = $contractInvoices(fifthCell)
-            .find('input')
-            .val()
+          const status = $contractInvoices(fifthCell).find('input').val()
 
           invoiceLines.push({
             id: invoiceId,
@@ -482,12 +485,21 @@ async function saveInvoices(fields, invoices) {
       date: invoice.expireDate,
       vendor: VENDOR,
       contractId: invoice.contractId,
-      title: invoice['id'],
-      invoice: invoice
+      vendorRef: invoice['id'],
+      fileAttributes: {
+        metadata: {
+          carbonCopy: true,
+          qualification: Qualification.getByLabel('energy_invoice'),
+          datetime: invoice.expireDate,
+          datetimeLabel: 'issueDate',
+          contentAuthor: VENDOR,
+          issueDate: invoice.expireDate
+        }
+      }
     })
   }
   await this.saveBills(documents, fields, {
-    fileIdAttributes: ['filename'],
+    fileIdAttributes: ['vendorRef'],
     contentType: 'application/pdf',
     identifiers: ['vendor'],
     timeout: Date.now() + 400000 * 60 * 1000

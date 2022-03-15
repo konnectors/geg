@@ -76,6 +76,9 @@
         "files": {
           "description": "Utilisé pour sauvegarder les factures"
         },
+        "carboncopy": {
+          "description": "Utilisé pour certifier que vos fichiers sont copie conforme avec les documents d'origine"
+        },
         "accounts": {
           "description": "Utilisé pour obtenir les données du compte"
         }
@@ -102,12 +105,23 @@
         "files": {
           "description": "Required to save the bills"
         },
+        "carboncopy": {
+          "description": "Required for carbon copy documents"
+        },
         "accounts": {
           "description": "Required to get the account's data"
         }
       }
     }
   },
+  "features": [
+    "BILLS",
+    "VENDOR_REF",
+    "METADATA_DEDUP",
+    "CARBON_COPY",
+    "DOC_QUALIFICATION_V2",
+    "SENTRY_V2"
+  ],
   "banksTransactionRegExp": "\\bgeg\\b",
   "manifest_version": "2"
 }
