@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.0.0",
   "name": "GEG",
   "type": "konnector",
   "language": "node",
@@ -121,6 +121,9 @@
     "CARBON_COPY",
     "DOC_QUALIFICATION_V2",
     "SENTRY_V2"
+  ],
+  "qualification_labels":[
+    "energy_invoice"
   ],
   "banksTransactionRegExp": "\\bgeg\\b",
   "manifest_version": "2"
