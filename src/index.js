@@ -472,11 +472,8 @@ async function saveInvoices(fields, invoices) {
   for (const invoice of invoices) {
     // Due to the very specific way the requests are handled on the server side, the requests "GET https://monagence.geg.fr/aelPROD/jsp/arc/habilitation/contrat.ZoomerContratOFactures.go?_sbs_=211110170137_1&_rqId_=XXX&act=consulterFactureDuplicata&selIdmesFacturesExtrait=YYYYY" and "POST https://monagence.geg.fr/aelPROD/jsp/arc/habilitation/contrat.ZoomerContratOFactures.go" must absolutely being executed consecutively.
     // So we can't parallelize their dl
-    const filename = `${VENDOR}_${invoice.contractId}_${
-      invoice.id
-    }_${utils.formatDate(invoice.expireDate)}_${invoice.amountInclTax.toFixed(
-      2
-    )}EUR.pdf`
+    const filename = `${utils.formatDate(invoice.expireDate)}_${VENDOR}_${invoice.contractId}`
+      + `_${invoice.id}_${invoice.amountInclTax.toFixed(2)}EUR.pdf`
 
     documents.push({
       invoice: invoice,
