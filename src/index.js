@@ -479,6 +479,7 @@ async function saveInvoices(fields, invoices) {
     )}EUR.pdf`
 
     documents.push({
+      invoice: invoice,
       fetchFile: fetchInvoice,
       filename: filename,
       amount: invoice.amountInclTax,
