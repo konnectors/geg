@@ -98,15 +98,12 @@ async function start(fields, cozyParameters) {
 
   // Get all contract ids of the client account
   let contractIds = await getContractIds()
-
   for (const contractId of contractIds) {
     log('debug', 'Fetching invoices for contract id: ' + contractId)
-
     // Fetch invoices details
     const invoices = await getContractInvoicesLines(fields, contractId)
-
     // Save invoices details to cozy instance
-    await saveInvoices.bind(this)(fields, invoices)
+    await saveInvoices.bind(this)(fields, invoices, contractId)
   }
 }
 
@@ -264,7 +261,7 @@ async function getContractHashValue(contractId) {
     await postRequest(MAIN_API_URL, {
       _nwg_: '',
       _sbs_: sbsVal,
-      act: 'basculerRechercheAvancee',
+      act: 'rechercherContrat',
       _rqId_: rqIdVal,
       _ongIdx: '',
       _mnLck_: true,
@@ -287,18 +284,20 @@ async function getContractHashValue(contractId) {
     })
   ).body
 
-  const contractHashId = $searchContractPage(
-    "a[id^='consulterContratApresRecherche_']"
-  ).attr('id')
-  const contractHash = contractHashId.substring(31)
-
-  log(
-    'debug',
-    `Extracted contract hash ${contractHash}, for contract id: ${contractId}`,
-    'getContractHashValue'
-  )
-
-  return contractHash
+  // we find all contracts in option elements
+  const options = $searchContractPage('option')
+  for (let i = 0; i < options.length; i++) {
+    if (options.eq(i).text().includes(`-- ${contractId} --`)) {
+      log(
+        'debug',
+        `Extracted contract hash ${options.eq(i).attr('value')},` +
+          'for contract id: ${contractId}',
+        'getContractHashValue'
+      )
+      return options.eq(i).attr('value')
+    }
+  }
+  log('warn', 'Not hash found for the contract, will probably fail')
 }
 
 async function getContractHomePage(contractId, contractHash) {
@@ -466,37 +465,38 @@ async function fetchInvoice(entry) {
   }).pipe(new stream.PassThrough())
 }
 
-async function saveInvoices(fields, invoices) {
+async function saveInvoices(fields, invoices, contractId) {
   const documents = []
 
   for (const invoice of invoices) {
     // Due to the very specific way the requests are handled on the server side, the requests "GET https://monagence.geg.fr/aelPROD/jsp/arc/habilitation/contrat.ZoomerContratOFactures.go?_sbs_=211110170137_1&_rqId_=XXX&act=consulterFactureDuplicata&selIdmesFacturesExtrait=YYYYY" and "POST https://monagence.geg.fr/aelPROD/jsp/arc/habilitation/contrat.ZoomerContratOFactures.go" must absolutely being executed consecutively.
     // So we can't parallelize their dl
-    const filename = `${VENDOR}_${invoice.contractId}_${
-      invoice.id
-    }_${utils.formatDate(invoice.expireDate)}_${invoice.amountInclTax.toFixed(
-      2
-    )}EUR.pdf`
-
-    documents.push({
-      fetchFile: fetchInvoice,
-      filename: filename,
-      amount: invoice.amountInclTax,
-      date: invoice.expireDate,
-      vendor: VENDOR,
-      contractId: invoice.contractId,
-      vendorRef: invoice['id'],
-      fileAttributes: {
-        metadata: {
-          carbonCopy: true,
-          qualification: Qualification.getByLabel('energy_invoice'),
-          datetime: invoice.expireDate,
-          datetimeLabel: 'issueDate',
-          contentAuthor: VENDOR,
-          issueDate: invoice.expireDate
+    const filename =
+      `${utils.formatDate(invoice.expireDate)}_${VENDOR}_${
+        invoice.contractId
+      }` + `_${invoice.id}_${invoice.amountInclTax.toFixed(2)}EUR.pdf`
+    if (invoice.contractId == contractId) {
+      documents.push({
+        invoice: invoice,
+        fetchFile: fetchInvoice,
+        filename: filename,
+        amount: invoice.amountInclTax,
+        date: invoice.expireDate,
+        vendor: VENDOR,
+        contractId: invoice.contractId,
+        vendorRef: invoice['id'],
+        fileAttributes: {
+          metadata: {
+            carbonCopy: true,
+            qualification: Qualification.getByLabel('energy_invoice'),
+            datetime: invoice.expireDate,
+            datetimeLabel: 'issueDate',
+            contentAuthor: VENDOR,
+            issueDate: invoice.expireDate
+          }
         }
-      }
-    })
+      })
+    }
   }
   await this.saveBills(documents, fields, {
     fileIdAttributes: ['vendorRef'],

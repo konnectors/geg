@@ -40,10 +40,10 @@
       "type": "io.cozy.files"
     },
     "accounts": {
-      "type": "io.cozy.accounts",
-      "verbs": [
-        "GET"
-      ]
+      "type": "io.cozy.accounts"
+    },
+    "carbon_copy": {
+      "type": "io.cozy.certified.carbon_copy"
     }
   },
   "developer": {
@@ -121,6 +121,9 @@
     "CARBON_COPY",
     "DOC_QUALIFICATION_V2",
     "SENTRY_V2"
+  ],
+  "qualification_labels":[
+    "energy_invoice"
   ],
   "banksTransactionRegExp": "\\bgeg\\b",
   "manifest_version": "2"
