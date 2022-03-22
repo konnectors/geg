@@ -125,6 +125,6 @@
   "qualification_labels":[
     "energy_invoice"
   ],
-  "banksTransactionRegExp": "\\bgeg\\b",
+  "banksTransactionRegExp": "\\bgaz et electricite de grenoble\\b",
   "manifest_version": "2"
 }
