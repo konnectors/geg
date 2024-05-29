@@ -199,6 +199,9 @@ async function authenticate(username, password) {
   const statusCode = loginResponse.statusCode
   const parsedBody = loginResponse.body
 
+  if (parsedBody.text().includes('est temporairement bloqu')) {
+    throw new Error('LOGIN_FAILED.TOO_MANY_ATTEMPTS')
+  }
   if (!statusCode === 200) {
     throw new Error(errors.VENDOR_DOWN)
   } else if (fullResponse.request.uri.href !== DO_LOGIN_URL) {
